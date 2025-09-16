@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import TryMeHeader from './TryMeHeader';
 import PhotoUpload from './PhotoUpload';
@@ -6,6 +7,7 @@ import PreferenceForm from './PreferenceForm';
 import GenerateButton from './GenerateButton';
 
 function TryMe() {
+  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
   const [preferences, setPreferences] = useState({});
 
@@ -24,8 +26,8 @@ function TryMe() {
       file: selectedFile?.name,
       preferences
     });
-    // TODO: Implement outfit generation logic
-    alert('Outfit generation feature coming soon!');
+    // Navigate to result page
+    navigate('/result');
   };
 
   return (

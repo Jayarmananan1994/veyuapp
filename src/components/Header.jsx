@@ -3,12 +3,26 @@ import { useNavigate } from 'react-router-dom';
 function Header({ currentPage = "Home" }) {
   const navigate = useNavigate();
   const isHomepage = currentPage === "Home";
+  const isResultPage = currentPage === "Result";
+  
   const headerStyle = isHomepage ? {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     zIndex: 10,
+    padding: '16px 40px'
+  } : isResultPage ? {
+    position: 'sticky',
+    top: 0,
+    zIndex: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    whiteSpace: 'nowrap',
+    borderBottom: '1px solid #e5e7eb',
+    backgroundColor: 'rgba(249, 250, 251, 0.8)',
+    backdropFilter: 'blur(8px)',
     padding: '16px 40px'
   } : {
     display: 'flex',
@@ -204,44 +218,108 @@ function Header({ currentPage = "Home" }) {
         </nav>
       )}
       
-      <button 
-        style={buttonStyle}
-        onClick={() => {
-          if (isHomepage) {
-            navigate('/tryme');
-          }
-        }}
-        onMouseEnter={(e) => {
-          if (isHomepage) {
-            e.target.style.opacity = '0.9';
-          } else {
-            e.target.style.backgroundColor = '#e2e8f0';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (isHomepage) {
-            e.target.style.opacity = '1';
-          } else {
-            e.target.style.backgroundColor = '#f1f5f9';
-          }
-        }}
-      >
-        {!isHomepage && (
-          <span style={{
-            fontSize: '16px',
-            fontFamily: 'Material Symbols Outlined'
-          }}>
-            person
-          </span>
-        )}
-        <span style={{ 
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap'
+      {isResultPage ? (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px'
         }}>
-          {buttonText}
-        </span>
-      </button>
+          <a 
+            href="#"
+            style={{
+              borderRadius: '50%',
+              padding: '8px',
+              color: '#4b5563',
+              transition: 'background-color 0.2s ease',
+              cursor: 'pointer',
+              textDecoration: 'none'
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#e5e7eb'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+          >
+            <span style={{
+              fontSize: '20px',
+              fontFamily: 'Material Symbols Outlined'
+            }}>
+              favorite
+            </span>
+          </a>
+          <a 
+            href="#"
+            style={{
+              borderRadius: '50%',
+              padding: '8px',
+              color: '#4b5563',
+              transition: 'background-color 0.2s ease',
+              cursor: 'pointer',
+              textDecoration: 'none'
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#e5e7eb'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+          >
+            <span style={{
+              fontSize: '20px',
+              fontFamily: 'Material Symbols Outlined'
+            }}>
+              person
+            </span>
+          </a>
+          <button style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBape1PZsJVY3Q0vSHQoT6n9M6m6DSvZJEu_Z84WnjIJ9v1rVQ9og0Yi9ONlNz4X-bPpkStchRVfXo6AVc6HcpFP8lRdBsuoZCChFef0eSq0qtEYuRt1YCkI9IEteSVCcsxpvQpI5j1Sczr8qhvSRdAXoKfJ9pt2cLCDqJAp-NZQkl18DNCPIJPBuLYUfSe8mec4hW9cQTLzHaMgfuQybpRBUJ6187zfIW0rlUUpf2_jz6o0ebq2P63JgDJyUfycspI6H1Tw18MElJJ")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            border: '2px solid rgba(209, 213, 219, 0.5)',
+            cursor: 'pointer',
+            transition: 'transform 0.2s ease'
+          }}
+          onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+          onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+          />
+        </div>
+      ) : (
+        <button 
+          style={buttonStyle}
+          onClick={() => {
+            if (isHomepage) {
+              navigate('/tryme');
+            }
+          }}
+          onMouseEnter={(e) => {
+            if (isHomepage) {
+              e.target.style.opacity = '0.9';
+            } else {
+              e.target.style.backgroundColor = '#e2e8f0';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (isHomepage) {
+              e.target.style.opacity = '1';
+            } else {
+              e.target.style.backgroundColor = '#f1f5f9';
+            }
+          }}
+        >
+          {!isHomepage && (
+            <span style={{
+              fontSize: '16px',
+              fontFamily: 'Material Symbols Outlined'
+            }}>
+              person
+            </span>
+          )}
+          <span style={{ 
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}>
+            {buttonText}
+          </span>
+        </button>
+      )}
     </header>
   );
 }
