@@ -1,152 +1,101 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SelectableButton from '../../components/SelectableButton';
 
 function PreferenceForm({ onPreferencesChange }) {
-  const [selections, setSelections] = useState({
-    bodyType: [],
-    skinTone: [],
-    skinUndertone: [],
-    occasion: []
+  const [formData, setFormData] = useState({
+    height: '',
+    weight: '',
+    occasion: '',
+    desiredEffect: []
   });
 
-  const preferenceConfig = {
-    bodyType: {
-      label: "Body type",
-      options: ["Hourglass", "Pear", "Apple", "Rectangle", "Inverted Triangle", "Triangle", "Oval", "Trapezoid"],
-      defaultSelected: ["Rectangle"]
-    },
-    skinTone: {
-      label: "Skin tone",
-      options: [
-        ["Light", "Fair", "Medium", "Tan", "Dark"],
-        ["Warm", "Cool", "Neutral"]
-      ],
-      defaultSelected: [["Medium"], ["Neutral"]]
-    },
-    occasion: {
-      label: "Occasion", 
-      options: ["Casual", "Formal", "Party", "Work", "Wedding", "Sport"],
-      defaultSelected: ["Casual", "Party"]
-    }
+  // Occasion to Desired Effect mapping
+  const occasionEffectMap = {
+    "Movie Outing": ["Effortless Chic", "Casual Confidence"],
+    "Wedding": ["Classic Elegance", "Romantic Glam", "Bohemian Muse"],
+    "Business": ["Classic Elegance", "Powerful Professional", "Modern Sophistication"],
+    "Casual Day Out": ["Casual Confidence", "Eco-Conscious Appeal", "Gender-Neutral Expression", "Athleisure Sophistication", "Preppy Academia"],
+    "Clubbing": ["Bold Statement", "Sexy Flex", "Edgy Avant-Garde"],
+    "Gym": ["Athleisure Sophistication"],
+    "Date": ["Glamorous Diva", "Sexy Flex"],
+    "Airport": ["Casual Confidence"]
   };
 
+  const occasionOptions = Object.keys(occasionEffectMap);
+  const defaultOccasion = "Casual Day Out";
+
   // Initialize default selections
-  useState(() => {
-    const defaultSelections = {
-      bodyType: preferenceConfig.bodyType.defaultSelected,
-      skinTone: preferenceConfig.skinTone.defaultSelected[0],
-      skinUndertone: preferenceConfig.skinTone.defaultSelected[1],
-      occasion: preferenceConfig.occasion.defaultSelected
+  useEffect(() => {
+    const defaultFormData = {
+      height: '',
+      weight: '',
+      occasion: defaultOccasion,
+      desiredEffect: []
     };
-    setSelections(defaultSelections);
+    setFormData(defaultFormData);
     if (onPreferencesChange) {
-      onPreferencesChange(defaultSelections);
+      onPreferencesChange(defaultFormData);
     }
   }, []);
 
-  const handleToggle = (category, subcategory, option) => {
-    setSelections(prev => {
-      const newSelections = { ...prev };
-      const key = subcategory || category;
-      
-      if (newSelections[key].includes(option)) {
-        newSelections[key] = newSelections[key].filter(item => item !== option);
-      } else {
-        newSelections[key] = [...newSelections[key], option];
-      }
-      
+  const handleInputChange = (field, value) => {
+    setFormData(prev => {
+      const newFormData = { ...prev, [field]: value };
       if (onPreferencesChange) {
-        onPreferencesChange(newSelections);
+        onPreferencesChange(newFormData);
       }
-      
-      return newSelections;
+      return newFormData;
     });
   };
 
-  const renderSection = (category, config) => {
-    if (category === 'skinTone') {
-      return (
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '12px'
-        }}>
-          <label style={{
-            color: '#475569',
-            fontSize: '16px',
-            fontWeight: '500'
-          }}>
-            {config.label}
-          </label>
-          
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '12px'
-          }}>
-            {config.options[0].map(option => (
-              <SelectableButton
-                key={option}
-                isSelected={selections.skinTone.includes(option)}
-                onToggle={() => handleToggle('skinTone', null, option)}
-              >
-                {option}
-              </SelectableButton>
-            ))}
-          </div>
-          
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '12px'
-          }}>
-            {config.options[1].map(option => (
-              <SelectableButton
-                key={option}
-                isSelected={selections.skinUndertone.includes(option)}
-                onToggle={() => handleToggle('skinUndertone', null, option)}
-              >
-                {option}
-              </SelectableButton>
-            ))}
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        gap: '12px'
-      }}>
-        <label style={{
-          color: '#475569',
-          fontSize: '16px',
-          fontWeight: '500'
-        }}>
-          {config.label}
-        </label>
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '12px'
-        }}>
-          {config.options.map(option => (
-            <SelectableButton
-              key={option}
-              isSelected={selections[category].includes(option)}
-              onToggle={() => handleToggle(category, null, option)}
-            >
-              {option}
-            </SelectableButton>
-          ))}
-        </div>
-      </div>
-    );
+  const handleOccasionSelect = (selectedOccasion) => {
+    setFormData(prev => {
+      // Reset desired effect when occasion changes
+      const newFormData = { 
+        ...prev, 
+        occasion: selectedOccasion,
+        desiredEffect: [] // Clear previous desired effects
+      };
+      if (onPreferencesChange) {
+        onPreferencesChange(newFormData);
+      }
+      return newFormData;
+    });
   };
+
+  const handleDesiredEffectToggle = (effect) => {
+    setFormData(prev => {
+      const newDesiredEffects = prev.desiredEffect.includes(effect) 
+        ? prev.desiredEffect.filter(item => item !== effect)
+        : [...prev.desiredEffect, effect];
+      
+      const newFormData = { ...prev, desiredEffect: newDesiredEffects };
+      if (onPreferencesChange) {
+        onPreferencesChange(newFormData);
+      }
+      return newFormData;
+    });
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '12px 16px',
+    borderRadius: '8px',
+    border: '1px solid #cbd5e1',
+    fontSize: '16px',
+    color: '#374151',
+    backgroundColor: 'white',
+    transition: 'border-color 0.2s ease',
+    outline: 'none'
+  };
+
+  const inputFocusStyle = {
+    borderColor: '#7c3aed',
+    boxShadow: '0 0 0 3px rgba(124, 58, 237, 0.1)'
+  };
+
+  // Get available desired effects for selected occasion
+  const availableDesiredEffects = formData.occasion ? occasionEffectMap[formData.occasion] || [] : [];
 
   return (
     <div style={{
@@ -166,11 +115,119 @@ function PreferenceForm({ onPreferencesChange }) {
         Tell us about you
       </h3>
       
-      {Object.entries(preferenceConfig).map(([category, config]) => (
-        <div key={category}>
-          {renderSection(category, config)}
+      {/* Height Input */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '12px'
+      }}>
+        <label style={{
+          color: '#475569',
+          fontSize: '16px',
+          fontWeight: '500'
+        }}>
+          Height
+        </label>
+        <input
+          type="text"
+          placeholder="e.g., 5'6&quot; or 168 cm"
+          value={formData.height}
+          onChange={(e) => handleInputChange('height', e.target.value)}
+          style={inputStyle}
+          onFocus={(e) => Object.assign(e.target.style, inputFocusStyle)}
+          onBlur={(e) => Object.assign(e.target.style, inputStyle)}
+        />
+      </div>
+
+      {/* Weight Input */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '12px'
+      }}>
+        <label style={{
+          color: '#475569',
+          fontSize: '16px',
+          fontWeight: '500'
+        }}>
+          Weight
+        </label>
+        <input
+          type="text"
+          placeholder="e.g., 140 lbs or 65 kg"
+          value={formData.weight}
+          onChange={(e) => handleInputChange('weight', e.target.value)}
+          style={inputStyle}
+          onFocus={(e) => Object.assign(e.target.style, inputFocusStyle)}
+          onBlur={(e) => Object.assign(e.target.style, inputStyle)}
+        />
+      </div>
+
+      {/* Occasion Selection (Single Select) */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '12px'
+      }}>
+        <label style={{
+          color: '#475569',
+          fontSize: '16px',
+          fontWeight: '500'
+        }}>
+          Occasion
+        </label>
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '12px'
+        }}>
+          {occasionOptions.map(option => (
+            <SelectableButton
+              key={option}
+              isSelected={formData.occasion === option}
+              onToggle={() => handleOccasionSelect(option)}
+            >
+              {option}
+            </SelectableButton>
+          ))}
         </div>
-      ))}
+      </div>
+
+      {/* Desired Effect Selection (Multi Select, based on occasion) */}
+      {formData.occasion && availableDesiredEffects.length > 0 && (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: '12px'
+        }}>
+          <label style={{
+            color: '#475569',
+            fontSize: '16px',
+            fontWeight: '500'
+          }}>
+            Desired Effect
+          </label>
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '12px'
+          }}>
+            {availableDesiredEffects.map(effect => (
+              <SelectableButton
+                key={effect}
+                isSelected={formData.desiredEffect.includes(effect)}
+                onToggle={() => handleDesiredEffectToggle(effect)}
+              >
+                {effect}
+              </SelectableButton>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

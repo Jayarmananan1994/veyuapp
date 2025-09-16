@@ -11,7 +11,7 @@ function TryMe() {
 
   const handleFileSelect = (file) => {
     setSelectedFile(file);
-    console.log('Selected file:', file.name);
+    console.log('Selected file:', file ? file.name : 'No file selected');
   };
 
   const handlePreferencesChange = (newPreferences) => {
