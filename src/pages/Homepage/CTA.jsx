@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom';
+
 function CTA() {
+  const navigate = useNavigate();
   return (
     <section style={{
       padding: '64px 16px',
@@ -54,10 +57,11 @@ function CTA() {
               border: 'none',
               transition: 'opacity 0.3s'
             }}
+            onClick={() => navigate('/tryme')}
             onMouseEnter={(e) => e.target.style.opacity = '0.9'}
             onMouseLeave={(e) => e.target.style.opacity = '1'}
             >
-              Download Now
+              Try It Now
             </button>
           </div>
         </div>

@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom';
+
 function Hero() {
+  const navigate = useNavigate();
   return (
     <section style={{
       position: 'relative',
@@ -62,6 +65,7 @@ function Hero() {
             border: 'none',
             transition: 'opacity 0.3s'
           }}
+          onClick={() => navigate('/tryme')}
           onMouseEnter={(e) => e.target.style.opacity = '0.9'}
           onMouseLeave={(e) => e.target.style.opacity = '1'}
           >
