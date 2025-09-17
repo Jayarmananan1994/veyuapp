@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useOutfit } from '../../context/OutfitContext.jsx';
 import Header from '../../components/Header';
 import TryMeHeader from './TryMeHeader';
 import PhotoUpload from './PhotoUpload';
 import PreferenceForm from './PreferenceForm';
 import GenerateButton from './GenerateButton';
+import MockLoader from '../../components/MockLoader';
 
 function TryMe() {
   const navigate = useNavigate();
+  const { generateOutfit, isLoading, error } = useOutfit();
   const [selectedFile, setSelectedFile] = useState(null);
   const [preferences, setPreferences] = useState({});
 
@@ -21,13 +24,29 @@ function TryMe() {
     console.log('Preferences updated:', newPreferences);
   };
 
-  const handleGenerateOutfit = () => {
-    console.log('Generating outfit with:', {
-      file: selectedFile?.name,
-      preferences
-    });
-    // Navigate to result page
-    navigate('/result');
+  const handleGenerateOutfit = async () => {
+    try {
+      // Prepare user inputs for API
+      const userInputs = {
+        imageFile: selectedFile,
+        height: preferences.height,
+        weight: preferences.weight,
+        occasion: preferences.occasion,
+        desiredEffect: preferences.desiredEffect || []
+      };
+
+      console.log('Generating outfit with:', userInputs);
+      
+      // Call mock API through context
+      await generateOutfit(userInputs);
+      
+      // Navigate to result page on success
+      navigate('/result');
+      
+    } catch (err) {
+      console.error('Failed to generate outfit:', err);
+      // Error handling is managed by context
+    }
   };
 
   return (
@@ -80,12 +99,33 @@ function TryMe() {
               
               <GenerateButton 
                 onClick={handleGenerateOutfit}
-                disabled={!selectedFile}
+                disabled={!selectedFile || isLoading}
               />
+
+              {error && (
+                <div style={{
+                  marginTop: '16px',
+                  padding: '12px 16px',
+                  backgroundColor: '#fef2f2',
+                  borderRadius: '8px',
+                  border: '1px solid #fecaca',
+                  textAlign: 'center'
+                }}>
+                  <p style={{
+                    color: '#dc2626',
+                    fontSize: '14px',
+                    margin: 0
+                  }}>
+                    {error}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </main>
       </div>
+      
+      <MockLoader isVisible={isLoading} />
     </div>
   );
 }

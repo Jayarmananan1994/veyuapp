@@ -1,40 +1,110 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useOutfit } from '../../context/OutfitContext.jsx';
+import { mockOutfitAPI } from '../../services/outfitAPI';
 import Header from '../../components/Header';
 import ResultHeader from './ResultHeader';
 import OutfitCard from './OutfitCard';
 import ActionButtons from './ActionButtons';
+import MockLoader from '../../components/MockLoader';
 
 function Result() {
-  const [outfitData, setOutfitData] = useState({
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB3ddtPT92mYj-gaeeHkJeZ2R9Kb7pOOyeuINJ3TuJbd9v37VXTUjzdej-CnvvpXDKsxgZchEbfXXMpi1x9FQBLkbjaaQsRn51kfZJYOarjPABVn5X-haf7ff5osgWgsnrI2Wyd2YH_dBfRA365zLszUTW9t9vZReXGyng3MOBVBABU3sls7z7mWYb43FhglFVUmRHiZcsJlNWT-RJ0DoAszyYpP3MNaMmLltHIX6hQzaCeECSUhpAgofCPZmoosphXqQtyIjXfJnoP",
-    styleName: "Effortless Chic",
-    occasion: "Casual",
-    reasons: [
-      {
-        icon: 'palette',
-        text: 'The neutral tones complement your warm skin undertone, creating a harmonious and radiant look.'
-      },
-      {
-        icon: 'accessibility_new',
-        text: 'The A-line cut of the dress flatters your pear body shape, highlighting your waist while gracefully draping over your hips.'
-      },
-      {
-        icon: 'celebration',
-        text: 'This outfit is perfect for a casual weekend brunch, matching the relaxed yet stylish occasion you specified.'
-      }
-    ]
-  });
+  const navigate = useNavigate();
+  const { outfitData, isLoading, error } = useOutfit();
+
+  // Redirect to TryMe if no outfit data available
+  useEffect(() => {
+    if (!outfitData && !isLoading) {
+      console.log('No outfit data found, redirecting to TryMe page');
+      navigate('/tryme');
+    }
+  }, [outfitData, isLoading, navigate]);
 
   const handleSaveToFavorites = () => {
-    console.log('Saving outfit to favorites:', outfitData);
-    alert('Outfit saved to favorites!');
+    if (outfitData?.data) {
+      console.log('Saving outfit to favorites:', outfitData.data);
+      alert('Outfit saved to favorites!');
+    }
   };
 
-  const handleShowAnother = () => {
-    console.log('Generating another recommendation...');
-    // TODO: Implement logic to generate another recommendation
-    alert('Generating another recommendation...');
+  const handleShowAnother = async () => {
+    try {
+      console.log('Generating another recommendation...');
+      
+      if (!outfitData?.data?.id || !outfitData?.userInputs) {
+        alert('Unable to generate alternative. Please try again from the beginning.');
+        return;
+      }
+
+      // Get alternative outfit using the API
+      const alternativeResult = await mockOutfitAPI.getAlternativeOutfit(
+        outfitData.data.id,
+        outfitData.userInputs
+      );
+
+      // Update the context with the new outfit data
+      // For now, we'll just show an alert since we don't have a method to update outfit data
+      console.log('Alternative outfit generated:', alternativeResult);
+      alert('New recommendation generated! (In a full implementation, this would update the display)');
+      
+    } catch (err) {
+      console.error('Failed to generate alternative outfit:', err);
+      alert('Failed to generate another recommendation. Please try again.');
+    }
   };
+
+  // Show loading state
+  if (isLoading) {
+    return <MockLoader isVisible={true} />;
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f9fafb'
+      }}>
+        <div style={{
+          textAlign: 'center',
+          padding: '32px',
+          backgroundColor: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+        }}>
+          <h2 style={{ color: '#dc2626', fontSize: '1.5rem', marginBottom: '16px' }}>
+            Oops! Something went wrong
+          </h2>
+          <p style={{ color: '#6b7280', marginBottom: '24px' }}>
+            {error}
+          </p>
+          <button
+            onClick={() => navigate('/tryme')}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#a413ec',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: 'bold'
+            }}
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if no outfit data (will redirect via useEffect)
+  if (!outfitData?.data) {
+    return null;
+  }
 
   return (
     <div style={{
@@ -62,7 +132,7 @@ function Result() {
         }}>
           <ResultHeader />
           
-          <OutfitCard outfitData={outfitData} />
+          <OutfitCard outfitData={outfitData.data} />
           
           <ActionButtons 
             onSaveToFavorites={handleSaveToFavorites}
