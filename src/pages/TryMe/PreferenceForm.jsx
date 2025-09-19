@@ -6,7 +6,9 @@ function PreferenceForm({ onPreferencesChange }) {
     height: '',
     weight: '',
     occasion: '',
-    desiredEffect: []
+    desiredEffect: [],
+    stylingPreferences: [],
+    additionalNotes: ''
   });
 
   // Occasion to Desired Effect mapping
@@ -22,6 +24,7 @@ function PreferenceForm({ onPreferencesChange }) {
   };
 
   const occasionOptions = Object.keys(occasionEffectMap);
+  const stylingOptions = ["No Makeup", "No Hair Change", "Minimal Accessories"];
   const defaultOccasion = "Casual Day Out";
 
   // Initialize default selections
@@ -30,7 +33,9 @@ function PreferenceForm({ onPreferencesChange }) {
       height: '',
       weight: '',
       occasion: defaultOccasion,
-      desiredEffect: []
+      desiredEffect: [],
+      stylingPreferences: [],
+      additionalNotes: ''
     };
     setFormData(defaultFormData);
     if (onPreferencesChange) {
@@ -70,6 +75,20 @@ function PreferenceForm({ onPreferencesChange }) {
         : [...prev.desiredEffect, effect];
       
       const newFormData = { ...prev, desiredEffect: newDesiredEffects };
+      if (onPreferencesChange) {
+        onPreferencesChange(newFormData);
+      }
+      return newFormData;
+    });
+  };
+
+  const handleStylingPreferenceToggle = (preference) => {
+    setFormData(prev => {
+      const newStylingPreferences = prev.stylingPreferences.includes(preference) 
+        ? prev.stylingPreferences.filter(item => item !== preference)
+        : [...prev.stylingPreferences, preference];
+      
+      const newFormData = { ...prev, stylingPreferences: newStylingPreferences };
       if (onPreferencesChange) {
         onPreferencesChange(newFormData);
       }
@@ -127,7 +146,7 @@ function PreferenceForm({ onPreferencesChange }) {
           fontSize: '16px',
           fontWeight: '500'
         }}>
-          Height
+          Height <span style={{color: '#9ca3af', fontSize: '14px'}}>(optional)</span>
         </label>
         <input
           type="text"
@@ -152,7 +171,7 @@ function PreferenceForm({ onPreferencesChange }) {
           fontSize: '16px',
           fontWeight: '500'
         }}>
-          Weight
+          Weight <span style={{color: '#9ca3af', fontSize: '14px'}}>(optional)</span>
         </label>
         <input
           type="text"
@@ -228,6 +247,72 @@ function PreferenceForm({ onPreferencesChange }) {
           </div>
         </div>
       )}
+
+      {/* Styling Preferences Selection (Multi Select) */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '12px'
+      }}>
+        <label style={{
+          color: '#475569',
+          fontSize: '16px',
+          fontWeight: '500'
+        }}>
+          Styling Preferences
+        </label>
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '12px'
+        }}>
+          {stylingOptions.map(option => (
+            <SelectableButton
+              key={option}
+              isSelected={formData.stylingPreferences.includes(option)}
+              onToggle={() => handleStylingPreferenceToggle(option)}
+            >
+              {option}
+            </SelectableButton>
+          ))}
+        </div>
+      </div>
+
+      {/* Additional Notes Text Field */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '12px'
+      }}>
+        <label style={{
+          color: '#475569',
+          fontSize: '16px',
+          fontWeight: '500'
+        }}>
+          Additional Notes <span style={{color: '#9ca3af', fontSize: '14px'}}>(optional)</span>
+        </label>
+        <textarea
+          placeholder="Any specific requirements or preferences you'd like us to consider..."
+          value={formData.additionalNotes}
+          onChange={(e) => handleInputChange('additionalNotes', e.target.value)}
+          rows={3}
+          style={{
+            ...inputStyle,
+            resize: 'vertical',
+            minHeight: '80px',
+            fontFamily: 'inherit'
+          }}
+          onFocus={(e) => Object.assign(e.target.style, inputFocusStyle)}
+          onBlur={(e) => Object.assign(e.target.style, {
+            ...inputStyle,
+            resize: 'vertical',
+            minHeight: '80px',
+            fontFamily: 'inherit'
+          })}
+        />
+      </div>
     </div>
   );
 }

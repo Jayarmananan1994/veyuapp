@@ -169,12 +169,7 @@ function PhotoUpload({ onFileSelect }) {
             accept="image/*"
             onChange={handleFileChange}
             style={{
-              position: 'absolute',
-              inset: 0,
-              height: '100%',
-              width: '100%',
-              cursor: 'pointer',
-              opacity: 0
+              display: 'none'
             }}
           />
         </div>
@@ -249,12 +244,7 @@ function PhotoUpload({ onFileSelect }) {
             accept="image/*"
             onChange={handleFileChange}
             style={{
-              position: 'absolute',
-              inset: 0,
-              height: '100%',
-              width: '100%',
-              cursor: 'pointer',
-              opacity: 0
+              display: 'none'
             }}
           />
         </div>

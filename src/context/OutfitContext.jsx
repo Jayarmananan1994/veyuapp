@@ -20,9 +20,21 @@ export const OutfitProvider = ({ children }) => {
     setError(null);
     
     try {
-      // Import the API service dynamically to avoid circular dependencies
-      const { mockOutfitAPI } = await import('../services/outfitAPI');
-      const result = await mockOutfitAPI.generateOutfit(userInputs);
+      // Determine which API to use based on environment variables
+      const useMockAPI = import.meta.env.VITE_USE_MOCK_API === 'true';
+      const isDevelopment = import.meta.env.DEV;
+      
+      let result;
+      if (useMockAPI || !isDevelopment) {
+        // Use mock API if explicitly configured or in production
+        const { mockOutfitAPI } = await import('../services/outfitAPI');
+        result = await mockOutfitAPI.generateOutfit(userInputs);
+      } else {
+        // Use real API in development (default)
+        const { realOutfitAPI } = await import('../services/realAPI');
+        result = await realOutfitAPI.generateOutfit(userInputs);
+      }
+      
       setOutfitData(result);
       return result;
     } catch (err) {

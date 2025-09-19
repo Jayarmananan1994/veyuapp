@@ -32,16 +32,56 @@ function OutfitCard({
         Object.assign(e.currentTarget.style, cardStyles);
       }}
     >
-      <img 
-        src={outfitData.image}
-        alt={`${outfitData.styleName} Outfit`}
-        style={{
-          height: 'auto',
-          width: '100%',
-          objectFit: 'cover',
-          display: 'block'
-        }}
-      />
+      {outfitData.image ? (
+        <img 
+          src={outfitData.image}
+          alt={`${outfitData.styleName} Outfit`}
+          style={{
+            height: 'auto',
+            width: '60%',
+            maxWidth: '400px',
+            objectFit: 'contain',
+            display: 'block',
+            margin: '0 auto'
+          }}
+        />
+      ) : (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '64px 32px',
+          backgroundColor: '#f9fafb',
+          borderBottom: '1px solid #e5e7eb'
+        }}>
+          <div style={{
+            fontSize: '48px',
+            color: '#9ca3af',
+            marginBottom: '16px',
+            fontFamily: 'Material Symbols Outlined'
+          }}>
+            image_not_supported
+          </div>
+          <h3 style={{
+            fontSize: '1.125rem',
+            fontWeight: '600',
+            color: '#374151',
+            margin: '0 0 8px 0',
+            textAlign: 'center'
+          }}>
+            Sorry, image could not be generated
+          </h3>
+          <p style={{
+            fontSize: '14px',
+            color: '#6b7280',
+            margin: 0,
+            textAlign: 'center'
+          }}>
+            We were unable to create a visual for this outfit recommendation
+          </p>
+        </div>
+      )}
       
       <div style={{
         padding: '32px'
