@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOutfit } from '../../context/OutfitContext.jsx';
-import { mockOutfitAPI } from '../../services/outfitAPI';
 import Header from '../../components/Header';
 import ResultHeader from './ResultHeader';
 import OutfitCard from './OutfitCard';
@@ -37,7 +36,7 @@ function Result() {
       }
 
       // Get alternative outfit using the API
-      const alternativeResult = await mockOutfitAPI.getAlternativeOutfit(
+      const alternativeResult = await .getAlternativeOutfit(
         outfitData.data.id,
         outfitData.userInputs
       );
