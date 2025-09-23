@@ -36,6 +36,19 @@ export const outfitAPI = {
         // Send the first desired effect as per API format
         formData.append('desiredEffect', userInputs.desiredEffect[0]);
       }
+
+      // Add styling preference boolean flags
+      if (userInputs.noMakeup !== undefined) {
+        formData.append('noMakeup', userInputs.noMakeup);
+      }
+
+      if (userInputs.noHairChange !== undefined) {
+        formData.append('noHairChange', userInputs.noHairChange);
+      }
+
+      if (userInputs.minimalAccessories !== undefined) {
+        formData.append('minimalAccessories', userInputs.minimalAccessories);
+      }
       
       // Handle styling preferences and additional notes
       let additionalNote = '';
@@ -125,13 +138,14 @@ export const outfitAPI = {
           styleName: getStyleNameFromEffect(userInputs.desiredEffect?.[0]),
           occasion: userInputs.occasion || 'Custom',
           desiredEffect: userInputs.desiredEffect?.[0] || 'Custom Style',
-          image: result.generatedImage && result.generatedImage.imageData ? 
-            `data:${result.generatedImage.mimeType || 'image/png'};base64,${result.generatedImage.imageData}` : 
+          image: result.generatedImage && result.generatedImage.imageData ?
+            `data:${result.generatedImage.mimeType || 'image/png'};base64,${result.generatedImage.imageData}` :
             null,
           whyItWorks: Array.isArray(result.whyItWorks || result.reasons) ? (result.whyItWorks || result.reasons).map((text, index) => ({
             icon: getReasonIcon(index),
             text: text
           })) : [],
+          recommendations: result.recommendations || null,
           appreciationMessage: result.appreciationMessage || "We hope you love this look!"
         },
         userInputs: userInputs,

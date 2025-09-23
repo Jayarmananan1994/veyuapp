@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import ResultHeader from './ResultHeader';
 import OutfitCard from './OutfitCard';
 import ActionButtons from './ActionButtons';
+import RecommendationDetails from './RecommendationDetails';
 import MockLoader from '../../components/MockLoader';
 
 function Result() {
@@ -133,8 +134,10 @@ function Result() {
           <ResultHeader />
           
           <OutfitCard outfitData={outfitData.data} />
-          
-          <ActionButtons 
+
+          <RecommendationDetails recommendations={outfitData.data.recommendations} />
+
+          <ActionButtons
             onSaveToFavorites={handleSaveToFavorites}
             onShowAnother={handleShowAnother}
           />

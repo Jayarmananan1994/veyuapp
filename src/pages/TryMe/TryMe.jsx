@@ -32,7 +32,11 @@ function TryMe() {
         height: preferences.height,
         weight: preferences.weight,
         occasion: preferences.occasion,
-        desiredEffect: preferences.desiredEffect || []
+        desiredEffect: preferences.desiredEffect || [],
+        additionalNotes: preferences.additionalNotes || 'None',
+        noMakeup: preferences.stylingPreferences?.includes('No Makeup') || false,
+        noHairChange: preferences.stylingPreferences?.includes('No Hair Change') || false,
+        minimalAccessories: preferences.stylingPreferences?.includes('Minimal Accessories') || false,
       };
 
       console.log('Generating outfit with:', userInputs);
