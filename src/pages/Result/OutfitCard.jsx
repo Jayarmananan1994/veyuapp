@@ -1,11 +1,11 @@
-import ReasonsList from './ReasonsList';
+import WhyItWorks from './WhyItWorks';
 
 function OutfitCard({ 
   outfitData = {
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB3ddtPT92mYj-gaeeHkJeZ2R9Kb7pOOyeuINJ3TuJbd9v37VXTUjzdej-CnvvpXDKsxgZchEbfXXMpi1x9FQBLkbjaaQsRn51kfZJYOarjPABVn5X-haf7ff5osgWgsnrI2Wyd2YH_dBfRA365zLszUTW9t9vZReXGyng3MOBVBABU3sls7z7mWYb43FhglFVUmRHiZcsJlNWT-RJ0DoAszyYpP3MNaMmLltHIX6hQzaCeECSUhpAgofCPZmoosphXqQtyIjXfJnoP",
     styleName: "Effortless Chic",
     occasion: "Casual",
-    reasons: []
+    whyItWorks: []
   }
 }) {
   
@@ -112,7 +112,7 @@ function OutfitCard({
           </span>
         </div>
         
-        <ReasonsList reasons={outfitData.reasons} />
+        <WhyItWorks whyItWorks={outfitData.whyItWorks} />
       </div>
     </div>
   );

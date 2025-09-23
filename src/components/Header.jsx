@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { MdFavorite, MdPerson } from 'react-icons/md';
 
 function Header({ currentPage = "Home" }) {
   const navigate = useNavigate();
@@ -237,12 +238,9 @@ function Header({ currentPage = "Home" }) {
             onMouseEnter={(e) => e.target.style.backgroundColor = '#e5e7eb'}
             onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
           >
-            <span style={{
-              fontSize: '20px',
-              fontFamily: 'Material Symbols Outlined'
-            }}>
-              favorite
-            </span>
+            <MdFavorite style={{
+              fontSize: '20px'
+            }} />
           </a>
           <a 
             href="#"
@@ -257,12 +255,9 @@ function Header({ currentPage = "Home" }) {
             onMouseEnter={(e) => e.target.style.backgroundColor = '#e5e7eb'}
             onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
           >
-            <span style={{
-              fontSize: '20px',
-              fontFamily: 'Material Symbols Outlined'
-            }}>
-              person
-            </span>
+            <MdPerson style={{
+              fontSize: '20px'
+            }} />
           </a>
           <button style={{
             width: '40px',
@@ -304,12 +299,9 @@ function Header({ currentPage = "Home" }) {
           }}
         >
           {!isHomepage && (
-            <span style={{
-              fontSize: '16px',
-              fontFamily: 'Material Symbols Outlined'
-            }}>
-              person
-            </span>
+            <MdPerson style={{
+              fontSize: '16px'
+            }} />
           )}
           <span style={{ 
             overflow: 'hidden',

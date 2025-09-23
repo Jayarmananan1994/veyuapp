@@ -107,6 +107,7 @@ export const realOutfitAPI = {
       }
       
       if (ENABLE_LOGGING) {
+        console.log('Response validation - has whyItWorks:', !!result.whyItWorks);
         console.log('Response validation - has reasons:', !!result.reasons);
         console.log('Response validation - has appreciationMessage:', !!result.appreciationMessage);
         console.log('Response validation - has generatedImage:', !!result.generatedImage);
@@ -127,7 +128,7 @@ export const realOutfitAPI = {
           image: result.generatedImage && result.generatedImage.imageData ? 
             `data:${result.generatedImage.mimeType || 'image/png'};base64,${result.generatedImage.imageData}` : 
             null,
-          reasons: Array.isArray(result.reasons) ? result.reasons.map((text, index) => ({
+          whyItWorks: Array.isArray(result.whyItWorks || result.reasons) ? (result.whyItWorks || result.reasons).map((text, index) => ({
             icon: getReasonIcon(index),
             text: text
           })) : [],

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { MdUpload } from 'react-icons/md';
 
 function PhotoUpload({ onFileSelect }) {
   const fileInputRef = useRef(null);
@@ -209,14 +210,11 @@ function PhotoUpload({ onFileSelect }) {
             backgroundColor: isDragging ? '#c084fc' : '#e2e8f0',
             transition: 'background-color 0.3s ease'
           }}>
-            <span style={{
+            <MdUpload style={{
               fontSize: '24px',
               color: isDragging ? 'white' : '#64748b',
-              fontFamily: 'Material Symbols Outlined',
               transition: 'color 0.3s ease'
-            }}>
-              upload
-            </span>
+            }} />
           </div>
           <div style={{
             display: 'flex',

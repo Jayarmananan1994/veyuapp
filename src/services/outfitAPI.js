@@ -1,4 +1,4 @@
-import { mockOutfitData, fallbackOutfits, generatePersonalizedReasons } from '../data/mockOutfits';
+import { mockOutfitData, fallbackOutfits, generatePersonalizedWhyItWorks } from '../data/mockOutfits';
 
 // Simulate network delay
 const simulateNetworkDelay = (min = 2000, max = 3500) => {
@@ -54,7 +54,7 @@ export const mockOutfitAPI = {
     const outfit = { ...selectedOutfit };
     
     // Personalize the outfit based on user inputs
-    outfit.reasons = generatePersonalizedReasons(userInputs, outfit.reasons);
+    outfit.whyItWorks = generatePersonalizedWhyItWorks(userInputs, outfit.whyItWorks);
     
     // Add user context to appreciation message
     if (height || weight) {
@@ -114,7 +114,7 @@ export const mockOutfitAPI = {
     
     // Personalize the alternative
     const outfit = { ...selectedAlternative };
-    outfit.reasons = generatePersonalizedReasons(userInputs, outfit.reasons);
+    outfit.whyItWorks = generatePersonalizedWhyItWorks(userInputs, outfit.whyItWorks);
     
     return {
       success: true,

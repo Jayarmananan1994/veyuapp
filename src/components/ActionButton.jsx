@@ -2,6 +2,7 @@ function ActionButton({
   children, 
   variant = "primary", 
   icon, 
+  IconComponent,
   onClick, 
   disabled = false,
   className = "",
@@ -76,7 +77,12 @@ function ActionButton({
       }}
       {...props}
     >
-      {icon && (
+      {IconComponent && (
+        <IconComponent style={{
+          fontSize: '20px'
+        }} />
+      )}
+      {icon && !IconComponent && (
         <span style={{
           fontSize: '20px',
           fontFamily: 'Material Symbols Outlined'

@@ -1,6 +1,9 @@
 import ActionButton from '../../components/ActionButton';
+import { useNavigate } from 'react-router-dom';
+import { MdFavorite, MdRestartAlt } from 'react-icons/md';
 
 function ActionButtons({ onSaveToFavorites, onShowAnother }) {
+  const navigate = useNavigate();
   const handleSaveToFavorites = () => {
     if (onSaveToFavorites) {
       onSaveToFavorites();
@@ -9,36 +12,40 @@ function ActionButtons({ onSaveToFavorites, onShowAnother }) {
     }
   };
 
-  const handleShowAnother = () => {
-    if (onShowAnother) {
-      onShowAnother();
-    } else {
-      alert('Generating another recommendation...');
-    }
+  const handleTryAgain = () => {
+    navigate('/tryme');
   };
 
   return (
-    <div style={{
+    <>
+      <style>{`
+        @media (min-width: 640px) {
+          .desktop-row {
+            flex-direction: row !important;
+            justify-content: center !important;
+          }
+        }
+      `}</style>
+      <div style={{
       marginTop: '48px',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       gap: '16px'
     }}>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '16px',
-        width: '100%',
-        '@media (min-width: 640px)': {
-          flexDirection: 'row',
-          justifyContent: 'center'
-        }
-      }}>
+      <div 
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px',
+          width: '100%'
+        }}
+        className="desktop-row"
+      >
         <ActionButton
           variant="primary"
-          icon="favorite"
+          IconComponent={MdFavorite}
           onClick={handleSaveToFavorites}
           style={{
             width: '100%',
@@ -50,17 +57,18 @@ function ActionButtons({ onSaveToFavorites, onShowAnother }) {
         
         <ActionButton
           variant="secondary"
-          icon="refresh"
-          onClick={handleShowAnother}
+          IconComponent={MdRestartAlt}
+          onClick={handleTryAgain}
           style={{
             width: '100%',
             maxWidth: '300px'
           }}
         >
-          Show Me Another
+          Try Again
         </ActionButton>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 
